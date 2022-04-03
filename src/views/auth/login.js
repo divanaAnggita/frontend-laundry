@@ -14,7 +14,7 @@ export default class login extends React.Component{
                 password: "",
                 message: "",
                 role: "",
-                logged: true
+                logged: false
             }
     }
     login = event => {
@@ -35,7 +35,8 @@ export default class login extends React.Component{
                 let token = res.data.token
                 localStorage.setItem("user",JSON.stringify(user))
                 localStorage.setItem("token",token)
-                this.props.history.push("/")
+                this.props.history.push("/admin/home")
+                // console.log(this.props.history)
             } else {
                 this.setState({message: res.data.message})
             }
@@ -58,24 +59,26 @@ export default class login extends React.Component{
                         ) : null }
                         <form onSubmit={ev => this.login(ev)}>
                             {/* username */}
-                            <label class="form-label" >Username : </label>
+                            <label className="form-label" >Username : </label>
                             <input type="text" className="form-control mb-1" placeholder="Username " value={this.state.username}
                             onChange={ev => this.setState({username: ev.target.value})} style={{borderRadius: "12px"}}/>
 
                             {/* password */}
-                            <label class="form-label">Password : </label>
+                            <label className="form-label">Password : </label>
                             <input type="password" className="form-control mb-1" placeholder="Password " value={this.state.password}
                             onChange={ev => this.setState({password: ev.target.value})}
                             autoComplete="false" style={{borderRadius: "12px"}}/>
 
                             {/* posisi */}
-                            <label class="form-label" >Posisi : </label>
-                            <select className="form-select form-select-sm" id="inlineFormCustomSelect" onChange={(ev) => this.setState({ role: ev.target.value })} value={this.state.role}
-                            style={{borderRadius: "12px", textAlign:'center'}}>
-                                    <option selected>Choose...</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="kasir">Kasir</option>
-                                </select> 
+                            <label className="form-label" >Posisi : </label>
+                            <div>
+                                <select className="form-select form-select-sm" id="inlineFormCustomSelect" onChange={(ev) => this.setState({ role: ev.target.value })} value={this.state.role}
+                                style={{borderRadius: "12px", textAlign:'center', width: "343px"}}>
+                                        <option value=" ">Choose...</option>
+                                        <option value="admin">Admin</option>
+                                        <option value="kasir">Kasir</option>
+                                    </select> 
+                            </div>
                             <center>
                             <button className="btn btn-success btn-sm" type="submit" style={{marginTop: 10}}>
                                 Sign In

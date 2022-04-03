@@ -2,9 +2,10 @@ import React from "react";
 // import Navbar from "../component/Navbar";
 import { base_url } from "../config";
 import axios from "axios";
-import $
+// import $
 // { error, event } 
-from "jquery"
+// from "jquery"
+import { Modal } from "reactstrap";
 
 export default class User extends React.Component{
     constructor(){
@@ -18,17 +19,24 @@ export default class User extends React.Component{
             username: "",
             password: "",
             role: "",
-            fillPassword: true
+            fillPassword: true,
+            modal: false
         }
         if (localStorage.getItem("token")){
             this.state.token = localStorage.getItem("token")
             // this.state.role = JSON.parse(localStorage.getItem("user")).role
             // console.log(this.state.token)
         } else {
-            window.location = "/login"
+            window.location = "/admin/login"
         }
         this.headerConfig.bind(this)
+        this.toggle = this.toggle.bind(this);
     }
+    toggle() {
+        this.setState({
+          modal: !this.state.modal
+        });
+      }
     headerConfig = () => {
         let header = {
             headers: { Authorization: `Bearer ${this.state.token}`}
@@ -54,7 +62,7 @@ export default class User extends React.Component{
     }
     
     Add = () => {
-        $("#modal_user").modal("show")        
+        // $("#modal_user").modal("show")        
         this.setState({
             action: "insert",
             id_user: 0,
@@ -62,24 +70,26 @@ export default class User extends React.Component{
             username: "",
             password: "",
             role: "",
-            fillPassword: true
+            fillPassword: true,
+            modal: true
         })
     }
     Edit = selectedItem => {
-        $("#modal_user").modal("show")
+        // $("#modal_user").modal("show")
         this.setState({
             action: "update",
             id_user: selectedItem.id_user,
             nama_user: selectedItem.nama_user,
             username: selectedItem.username,
             password: selectedItem.password,
-            role: selectedItem.role
+            role: selectedItem.role,
+            modal: true
         })
     }
    
     saveUser = event => {
         event.preventDefault()
-        $("#modal_user").modal("hide")
+        // $("#modal_user").modal("hide")
         let form = {
             id_user: this.state.id_user,
             nama_user: this.state.nama_user,
@@ -97,6 +107,7 @@ export default class User extends React.Component{
             .then(response => {
                 window.alert(response.data.message)
                 this.getUser()
+                this.setState({modal:false})
             })
             .catch(error => console.log(error))
         } else if(this.state.action === "update") {
@@ -104,13 +115,14 @@ export default class User extends React.Component{
             .then(response => {
                 window.alert(response.data.message)
                 this.getUser()
+                this.setState({modal:false})
             })
             .catch(error => console.log(error))
         }
     }
     dropUser = selectedItem => {
         if(window.confirm("Apakah anda yakin akan menghapus?")){
-            let url = base_url + "/user" + selectedItem.id_user
+            let url = base_url + "/user/" + selectedItem.id_user
             axios.delete(url, this.headerConfig())
             .then(response => {
                 window.alert(response.data.message)
@@ -167,16 +179,15 @@ export default class User extends React.Component{
                     </button>
 
                     {/* Modal User */}
-                    <div className="modal fade" id="modal_user">
-                        <div className="modal-dialog">
-                            <div className="modal-content">
+                    <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                        <div className="modal-content">
                                 <div className="modal-header bg-info text-white">
                                     <h4>Form User</h4>
                                 </div>
                                 <div className="modal-body">
                                     <form onSubmit={ev => this.saveUser(ev)}>
                                         Nama User
-                                        <input type="text" className="form-control mb-1"
+                                        <input type="text" className="form-control mb-1 bg-dark"
                                         value={this.state.nama_user}
                                         onChange={ev => this.setState({nama_user: ev.target.value})} 
                                         required
@@ -184,7 +195,7 @@ export default class User extends React.Component{
 
                                         Role
                                         <div className="form-group">
-                                            <select name="role" id_role="role" className="form-control"
+                                            <select name="role" id_role="role" className="form-control bg-dark"
                                             onChange={ev => this.setState({role: ev.target.value})}
                                             id="exampleFormControlSelect1" value={this.state.role}>
                                                 <option>--- Pilih ---</option>     
@@ -198,21 +209,21 @@ export default class User extends React.Component{
                                         </div>
 
                                         Username
-                                        <input type="text" className="form-control mb-1"
+                                        <input type="text" className="form-control mb-1 bg-dark"
                                         value={this.state.username}
                                         onChange={ev => this.setState({username: ev.target.value})}
                                         required
                                         />
 
                                         { this.state.action === "update" && this.state.fillPassword === false ? (
-                                            <button className="btn btn-sm btn-secondary mb-1 btn-block"
+                                            <button className="btn btn-sm btn-secondary mb-1 bg-dark"
                                             onClick={() => this.setState({fillPassword: true})}>
                                                 Change Password
                                             </button>
                                         ) : (
                                             <div>
                                                 Password
-                                                <input type="password" className="form-control mb-1"
+                                                <input type="password" className="form-control mb-1 bg-dark"
                                                 value={this.state.password}
                                                 onChange={ev => this.setState({password: ev.target.value})}
                                                 required
@@ -226,8 +237,7 @@ export default class User extends React.Component{
                                     </form>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                    </Modal>
                 </div>
             </div>
         )

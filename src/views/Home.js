@@ -38,7 +38,7 @@ export default class Home extends React.Component{
             if (error.res) {
                 if (error.res.status){
                 window.alert(error.res.data.message)
-                this.props.history.push("/login")
+                this.props.history.push("/admin/login")
                 }
             }else {
                 console.log(error)
@@ -56,7 +56,7 @@ export default class Home extends React.Component{
             if (error.res) {
                 if (error.res.status){
                     window.alert(error.res.data.message)
-                    this.props.history.push("/login")
+                    this.props.history.push("/admin/login")
                 }
             } else {
                 console.log(error)
@@ -73,7 +73,7 @@ export default class Home extends React.Component{
             if (error.res) {
                 if (error.res.status){
                     window.alert(error.res.data.message)
-                    this.props.history.push("/login")
+                    this.props.history.push("/admin/login")
                 }
             } else {
                 console.log(error)
@@ -90,7 +90,7 @@ export default class Home extends React.Component{
             if (error.res) {
                 if (error.res.status) {
                     window.alert(error.res.data.message)
-                    this.props.history.push("/login")
+                    this.props.history.push("/admin/login")
                 }
             } else {
                 console.log(error)

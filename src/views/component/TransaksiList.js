@@ -6,8 +6,22 @@ import Pdf from "react-to-pdf"
 // untuk menampilkan icon
 import * as FaIcons from "react-icons/fa"
 import * as BiIcons from "react-icons/bi";
+import { Modal, Table} from "reactstrap";
 
 export default class TransaksiList extends React.Component {
+    constructor(){
+        super()
+        this.state = {
+            modal : false
+        }
+        this.toggle= this.toggle.bind(this);
+    }
+    toggle() {
+        this.setState({
+          modal: !this.state.modal
+        });
+      }
+    
     // untuk menghitung total
     getAmount = paket => {
         let total = 0
@@ -111,9 +125,8 @@ export default class TransaksiList extends React.Component {
                             <br></br>
 
                             {/* button untuk detail */}
-                            <button className="btn btn-sm btn-success m-1" data-toggle="modal"
-                            data-target={`#modalDetail${this.props.id_transaksi}`}>
-                                <BiIcons.BiDetail />
+                            <button className="btn btn-sm btn-success m-1" >
+                                <BiIcons.BiDetail onClick={()=>{this.setState({modal: true})}}/>
                             </button>
                             
                             {/* button untuk mengedit */}
@@ -130,10 +143,9 @@ export default class TransaksiList extends React.Component {
                 </div>
 
                 {/* modal component */}
-                <div className="modal fade" id={`modalDetail${this.props.id_transaksi}`}>
-                    <div className="modal-dialog modal-lg">
-                        <div className="modal-content">
-                            <div className="modal-header bg-success text-white">
+                <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                <div className="modal-content text-dark">
+                            <div className="modal-header bg-success">
                                 <h5>Detail of Transaksi</h5>
 
                                 {/* button untuk mengenerate file pdf */}
@@ -146,10 +158,10 @@ export default class TransaksiList extends React.Component {
                                 </Pdf>
                             </div>
                             <div className="modal-body" ref={this.ref}>
-                                <h5>Member: {this.props.nama_member}</h5>
-                                <h6>Tanggal Masuk: {this.convertTime(this.props.tgl)}</h6>
-                                <h6>Tanggal Bayar: {this.convertTime(this.props.tgl_bayar)}</h6>
-                                <table className="table table-bordered">
+                                <h5 className="text-dark">Member: {this.props.nama_member}</h5>
+                                <h6 className="text-dark">Tanggal Masuk: {this.convertTime(this.props.tgl)}</h6>
+                                <h6 className="text-dark">Tanggal Bayar: {this.convertTime(this.props.tgl_bayar)}</h6>
+                                <Table dark>
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -181,11 +193,10 @@ export default class TransaksiList extends React.Component {
                                             </td>
                                         </tr>
                                     </tbody> 
-                                </table>
+                                </Table>
                             </div>
                         </div>
-                    </div>
-                </div>
+                </Modal>
             </div>
         );
     }

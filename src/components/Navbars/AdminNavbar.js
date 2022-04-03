@@ -17,6 +17,8 @@ import {
   NavbarToggler,
 } from "reactstrap";
 
+import {useHistory} from "react-router-dom";
+
 function AdminNavbar(props) {
   const [collapseOpen, setcollapseOpen] = React.useState(false);
   const [color, setcolor] = React.useState("navbar-transparent");
@@ -44,6 +46,12 @@ function AdminNavbar(props) {
     }
     setcollapseOpen(!collapseOpen);
   };
+  const history = useHistory();
+  const logout = () => {
+    localStorage.removeItem("token")
+    localStorage.removeItem("user")
+    history.push("/login")
+  }
   return (
     <>
       <Navbar className={classNames("navbar-absolute", color)} expand="lg">
@@ -96,7 +104,7 @@ function AdminNavbar(props) {
                   </NavLink>
                   <DropdownItem divider tag="li" />
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item">Log out</DropdownItem>
+                    <DropdownItem className="nav-item"  onClick={() => logout()}>Log out</DropdownItem>
                   </NavLink>
                 </DropdownMenu>
               </UncontrolledDropdown>

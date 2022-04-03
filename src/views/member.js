@@ -3,7 +3,7 @@ import React from "react";
 import MemberList from "../views/component/MemberList";
 import { base_url } from "../config";
 import axios from "axios";
-import $ from "jquery";
+import { Modal } from "reactstrap";
 
 export default class Member extends React.Component{
     constructor(){
@@ -17,15 +17,23 @@ export default class Member extends React.Component{
             alamat: "",
             jenis_kelamin: "",
             id_member: "",
+            modal: false
 
         }
         if(localStorage.getItem("token")){
             this.state.token = localStorage.getItem("token")
             this.state.role = JSON.parse(localStorage.getItem("user")).role
         } else {
-            window.location = "/login"
-        } this.headerConfig.bind(this)
+            window.location = "/admin/login"
+        }
+        this.headerConfig.bind(this)
+        this.toggle = this.toggle.bind(this);
     }
+    toggle() {
+        this.setState({
+          modal: !this.state.modal
+        });
+      }
     headerConfig = () => {
         let header ={
             headers: { Authorization: `Bearer ${this.state.token}`}
@@ -50,36 +58,38 @@ export default class Member extends React.Component{
         })
     }
     Add = () => {
-        $("#modal_member").modal("show")
+        // $("#modal_member").modal("show")
         this.setState({
             action: "insert",
             id_member: 0,
             nama_member: "",
             alamat: "",
             jenis_kelamin: "",
-            tlp: ""
+            tlp: "",
+            modal: true
         })
     }
     Edit = selectedItem => {
-        $("#modal_member").modal("show")
+        // $("#modal_member").modal("show")
         this.setState({
             action: "update",
             id_member: selectedItem.id_member,
             nama_member: selectedItem.nama_member,
             alamat: selectedItem.alamat,
             jenis_kelamin: selectedItem.jenis_kelamin,
-            tlp: selectedItem.tlp
+            tlp: selectedItem.tlp,
+            modal: true
         })
     }
     saveMember = event => {
         event.preventDefault()
-        $("#modal_member").modal("hide")
+        // $("#modal_member").modal("hide")
         let form = {
             id_member: this.state.id_member,
             nama_member: this.state.nama_member,
             alamat: this.state.alamat,
             jenis_kelamin: this.state.jenis_kelamin,
-            tlp: this.state.tlp
+            tlp: this.state.tlp,
         }
 
         let url = base_url + "/member"
@@ -88,6 +98,7 @@ export default class Member extends React.Component{
             .then(response => {
                 window.alert(response.data.message)
                 this.getMember()
+                this.setState({modal: false});
             })
             .catch(error => console.log(error))
         } else if (this.state.action === "update") {
@@ -95,6 +106,7 @@ export default class Member extends React.Component{
             .then(response => {
                 window.alert(response.data.message)
                 this.getMember()
+                this.setState({modal: false});
             })
             .catch(error => console.log(error))
         }
@@ -139,30 +151,29 @@ export default class Member extends React.Component{
                 </div>
 
                 {/* modal member */}
-                <div className="modal fade" id="modal_member">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header bg-info text-white">
+                <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                        <div className="modal-content text-black">
+                            <div className="modal-header bg-info">
                                 <h4>Form Member</h4>
                             </div>
                             <div className="modal-body">
                                 <form onSubmit={ev => this.saveMember(ev)}>
                                     Member Name
-                                    <input type="text" className="form-control mb-1"
+                                    <input type="text" className="form-control mb-1 bg-dark"
                                     value={this.state.nama_member}
                                     onChange={ev => this.setState({nama_member: ev.target.value})}
                                     required
                                     />
 
                                     Member Address
-                                    <input type="text" className="form-control mb-1"
+                                    <input type="text" className="form-control mb-1 bg-dark"
                                     value={this.state.alamat}
                                     onChange={ev => this.setState({alamat: ev.target.value})}
                                     required
                                     />
 
                                     Jenis Kelamin
-                                    <div className="form-group">
+                                    <div className="form-group bg-dark">
                                         <select name="jenis_kelamin" id="jenis_kelamin" className="form-control"
                                         onChange={ev => this.setState({jenis_kelamin: ev.target.value})}
                                         value={this.state.jenis_kelamin}>
@@ -177,7 +188,7 @@ export default class Member extends React.Component{
                                     </div>
 
                                     Member Phone
-                                    <input type="text" className="form-control mb-1"
+                                    <input type="text" className="form-control mb-1 bg-dark"
                                     value={this.state.tlp}
                                     onChange={ev => this.setState({tlp: ev.target.value})}
                                     required
@@ -189,8 +200,7 @@ export default class Member extends React.Component{
                                 </form>
                             </div>
                         </div>
-                    </div>
-                </div>
+                </Modal>
             </div>
         )
     }

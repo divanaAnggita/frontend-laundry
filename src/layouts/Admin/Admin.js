@@ -22,6 +22,16 @@ function Admin(props) {
   const [sidebarOpened, setsidebarOpened] = React.useState(
     document.documentElement.className.indexOf("nav-open") !== -1
   );
+  const [token, setToken] = React.useState(
+    null
+  );
+
+  React.useEffect(() => {
+    setToken(localStorage.getItem("token"))
+  },[
+    localStorage.getItem("token")
+  ])
+
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";
@@ -89,7 +99,8 @@ function Admin(props) {
       {({ color, changeColor }) => (
         <React.Fragment>
           <div className="wrapper">
-            <Sidebar
+            {token && (
+              <Sidebar
               routes={routes}
               logo={{
                 outterLink: "https://www.creative-tim.com/",
@@ -98,15 +109,20 @@ function Admin(props) {
               }}
               toggleSidebar={toggleSidebar}
             />
+            )}
+            
             <div className="main-panel" ref={mainPanelRef} data={color}>
-              <AdminNavbar
-                brandText={getBrandText(location.pathname)}
-                toggleSidebar={toggleSidebar}
-                sidebarOpened={sidebarOpened}
-              />
+              {token && (
+                 <AdminNavbar
+                 brandText={getBrandText(location.pathname)}
+                 toggleSidebar={toggleSidebar}
+                 sidebarOpened={sidebarOpened}
+               />
+              )}
+             
               <Switch>
                 {getRoutes(routes)}
-                <Redirect from="*" to="/admin/dashboard" />
+                <Redirect from="*" to="/admin/login" />
               </Switch>
               {
                 // we don't want the Footer to be rendered on map page

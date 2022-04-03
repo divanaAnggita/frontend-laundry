@@ -23,6 +23,16 @@ var ps;
 function Sidebar(props) {
   const location = useLocation();
   const sidebarRef = React.useRef(null);
+
+  const [role, setRole] = React.useState(
+    null
+  );
+
+  React.useEffect(() => {
+    setRole(JSON.parse(localStorage.getItem("user")).role)
+  },[
+    localStorage.getItem("user")
+  ])
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
     return location.pathname === routeName ? "active" : "";
@@ -110,6 +120,7 @@ function Sidebar(props) {
             <Nav>
               {routes.map((prop, key) => {
                 if (prop.redirect) return null;
+                if(!prop.isKasir && role !== "admin") return null;
                 return (
                   <li
                     className={

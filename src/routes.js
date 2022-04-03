@@ -1,19 +1,18 @@
 
 // import Dashboard from "views/Dashboard.js";
-import Icons from "views/Icons.js";
+// import Icons from "views/Icons.js";
 // import Map from "views/Map.js";
 // import Notifications from "views/Notifications.js";
 // import Rtl from "views/Rtl.js";
-import TableList from "views/TableList.js";
+// import TableList from "views/TableList.js";
 // import Typography from "views/Typography.js";
-import UserProfile from "views/UserProfile.js";
+// import UserProfile from "views/UserProfile.js";
 import Home from "views/Home";
-import login from "views/auth/login";
+// import login from "views/auth/login";
 import User from "views/user";
 import Transaksi from "views/Transaksi";
 import Paket from "views/paket";
 import Member from "views/member";
-
 
 var routes = [
   // {
@@ -24,14 +23,14 @@ var routes = [
   //   component: Dashboard,
   //   layout: "/admin",
   // },
-  {
-    path: "/icons",
-    name: "Icons",
-    rtlName: "الرموز",
-    icon: "tim-icons icon-atom",
-    component: Icons,
-    layout: "/admin",
-  },
+  // {
+  //   path: "/icons",
+  //   name: "Icons",
+  //   rtlName: "الرموز",
+  //   icon: "tim-icons icon-atom",
+  //   component: Icons,
+  //   layout: "/admin",
+  // },
   // {
   //   path: "/map",
   //   name: "Map",
@@ -48,22 +47,22 @@ var routes = [
   //   component: Notifications,
   //   layout: "/admin",
   // },
-  {
-    path: "/user-profile",
-    name: "User Profile",
-    rtlName: "ملف تعريفي للمستخدم",
-    icon: "tim-icons icon-single-02",
-    component: UserProfile,
-    layout: "/admin",
-  },
-  {
-    path: "/tables",
-    name: "Table List",
-    rtlName: "قائمة الجدول",
-    icon: "tim-icons icon-puzzle-10",
-    component: TableList,
-    layout: "/admin",
-  },
+  // {
+  //   path: "/user-profile",
+  //   name: "User Profile",
+  //   rtlName: "ملف تعريفي للمستخدم",
+  //   icon: "tim-icons icon-single-02",
+  //   component: UserProfile,
+  //   layout: "/admin",
+  // },
+  // {
+  //   path: "/tables",
+  //   name: "Table List",
+  //   rtlName: "قائمة الجدول",
+  //   icon: "tim-icons icon-puzzle-10",
+  //   component: TableList,
+  //   layout: "/admin",
+  // },
   // {
   //   path: "/typography",
   //   name: "Typography",
@@ -87,15 +86,16 @@ var routes = [
     icon: "tim-icons icon-puzzle-10",
     component: Home,
     layout: "/admin",
+    isKasir: true
   },
-  {
-    path: "/login",
-    name: "login",
-    rtlName: "الرموز",
-    icon: "tim-icons icon-atom",
-    component: login,
-    layout: "/admin",
-  },
+  // {
+  //   path: "/login",
+  //   name: "login",
+  //   rtlName: "الرموز",
+  //   icon: "tim-icons icon-atom",
+  //   component: login,
+  //   layout: "/admin",
+  // },
   {
     path: "/user",
     name: "user",
@@ -103,6 +103,7 @@ var routes = [
     icon: "tim-icons icon-atom",
     component: User,
     layout: "/admin",
+    isKasir: false
   },
   {
     path: "/transaksi",
@@ -111,6 +112,7 @@ var routes = [
     icon: "tim-icons icon-atom",
     component: Transaksi,
     layout: "/admin",
+    isKasir: true
   },
   {
     path: "/paket",
@@ -119,6 +121,7 @@ var routes = [
     icon: "tim-icons icon-atom",
     component: Paket,
     layout: "/admin",
+    isKasir: false
   },
   {
     path: "/member",
@@ -127,6 +130,7 @@ var routes = [
     icon: "tim-icons icon-atom",
     component: Member,
     layout: "/admin",
+    isKasir: false
   },
 ];
 export default routes;

@@ -2,8 +2,9 @@ import React from "react";
 import axios from "axios";
 // import Navbar from "../component/Navbar";
 import { base_url } from "../config";
-import $ from "jquery"
+// import $ from "jquery"
 import PaketList from "../views/component/PaketList";
+import { Modal } from "reactstrap";
 
 export default class Paket extends React.Component{
     constructor(){
@@ -14,7 +15,8 @@ export default class Paket extends React.Component{
             action: "",
             jenis_paket: "",
             harga: 0,
-            id_paket: ""
+            id_paket: "",
+            modal : false
         }
         if(localStorage.getItem("token")){
             this.state.token = localStorage.getItem("token")
@@ -24,7 +26,13 @@ export default class Paket extends React.Component{
             window.location="/login"
         }
         this.headerConfig.bind(this)
+        this.toggle = this.toggle.bind(this);
     }
+    toggle() {
+        this.setState({
+          modal: !this.state.modal
+        });
+      }
     headerConfig = () => {
         let header ={
             headers: {Authorization: `Bearer ${this.state.token}`}
@@ -49,29 +57,31 @@ export default class Paket extends React.Component{
         })
     }
     Add = () => {
-        $("#modal_paket").modal("show")
+        // $("#modal_paket").modal("show")
         this.setState({
             action: "insert",
             id_paket: 0,
             jenis_paket: "",
-            harga: 0
+            harga: 0,
+            modal: true
         })
     }
 
     // function edit -> untuk memberikan inisialisasi data dan menampilkan modal untuk mengedit data
     Edit = selectedItem => {
-        $("#modal_paket").modal("show")
+        // $("#modal_paket").modal("show")
         this.setState({
             action: "update",
             id_paket: selectedItem.id_paket,
             jenis_paket: selectedItem.jenis_paket,
-            harga: selectedItem.harga            
+            harga: selectedItem.harga,
+            modal: true        
         })
     }
 
     savePaket = event => {
         event.preventDefault()
-        $("#modal_paket").modal("hide")
+        // $("#modal_paket").modal("hide")
         let form = {
             id_paket: this.state.id_paket,
             jenis_paket: this.state.jenis_paket,
@@ -83,6 +93,7 @@ export default class Paket extends React.Component{
             .then(response => {
                 window.alert(response.data.message)
                 this.getPaket()
+                this.setState({modal: false})
             })
             .catch(error => console.log(error))
         } else if (this.state.action === "update") {
@@ -90,6 +101,7 @@ export default class Paket extends React.Component{
             .then(response => {
                 window.alert(response.data.message)
                 this.getPaket()
+                this.setState({modal: false})
             })
             .catch(error => console.log(error))
         }
@@ -135,23 +147,22 @@ export default class Paket extends React.Component{
                 </div>
 
                 {/* modal paket */}
-                <div className="modal fade" id="modal_paket">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
+                <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                <div className="modal-content">
                             <div className="modal-header bg-info text-white">
                                 <h4>Form Paket</h4>
                             </div>
                             <div className="modal-body">
                                 <form onSubmit={ev => this.savePaket(ev)}>
                                     Jenis Paket
-                                    <input type="text" className="form-control mb-1"
+                                    <input type="text" className="form-control mb-1 bg-dark"
                                      value={this.state.jenis_paket}
                                      onChange={ev => this.setState({jenis_paket: ev.target.value})}
                                      required
                                      />
 
                                     Harga
-                                    <input type="number" className="form-control mb-1"
+                                    <input type="number" className="form-control mb-1 bg-dark"
                                      value={this.state.harga}
                                      onChange={ev => this.setState({harga: ev.target.value})}
                                      required
@@ -163,8 +174,7 @@ export default class Paket extends React.Component{
                                 </form>
                             </div>
                         </div>
-                    </div>
-                </div>
+                </Modal>
             </div>
         )
     }
